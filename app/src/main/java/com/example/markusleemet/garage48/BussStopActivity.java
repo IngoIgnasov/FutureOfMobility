@@ -1,9 +1,11 @@
 package com.example.markusleemet.garage48;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.Arrays;
 public class BussStopActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter adapter;
+    private TextView nameOfStation;
 
 
 
@@ -20,6 +23,10 @@ public class BussStopActivity extends AppCompatActivity {
         setContentView(R.layout.activity_buss_stop);
         listView = findViewById(R.id.bussesAtBussStation);
         listView.setAdapter(adapter);
+        Intent intent = getIntent();
+        nameOfStation = findViewById(R.id.nameOfStation);
+        nameOfStation.setText(intent.getStringExtra("nameOfStation"));
+
 
 
         ArrayList<BusInfo> bussesList = new ArrayList<>();

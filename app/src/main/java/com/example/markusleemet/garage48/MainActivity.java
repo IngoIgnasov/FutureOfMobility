@@ -51,6 +51,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import retrofit2.http.POST;
 
 import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
 import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
@@ -96,12 +97,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         Mapbox.getInstance(this, "pk.eyJ1IjoibWFya3VzbGVlbWV0IiwiYSI6ImNqc2M2OW9xbDA1dmM0M254aGJsMWd6a3oifQ.Tk8i1j5_Bsy3ZGxykgYDpw");
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this, R.layout.busitem, R.id.textView, new ArrayList<>(Arrays.asList("buss nr1", "buss nr2", "buss nr3", "buss nr4", "buss nr5")));
+        adapter = new ArrayAdapter<>(this, R.layout.busitem, R.id.textView, new ArrayList<>(Arrays.asList("Brasas stacija", "Gustava Zemgala gatve", "Brīvības iela", "Pērnavas iela", "Tallinas iela")));
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent bussStopIntent = new Intent(MainActivity.this, BussStopActivity.class);
+                bussStopIntent.putExtra("nameOfStation", parent.getItemAtPosition(position).toString());
+                Log.i("gps", parent.getItemAtPosition(position).toString());
                 startActivity(bussStopIntent);
             }
         });

@@ -8,17 +8,19 @@
     tools:context=".BussStopActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/nameOfStation"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Buss Arrivals"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="35dp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/bussesAtBussStation"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/bussesAtBussStation"
@@ -32,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/nameOfStation" />
 
 </android.support.constraint.ConstraintLayout>
 
