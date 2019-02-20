@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         Mapbox.getInstance(this, "pk.eyJ1IjoibWFya3VzbGVlbWV0IiwiYSI6ImNqc2M2OW9xbDA1dmM0M254aGJsMWd6a3oifQ.Tk8i1j5_Bsy3ZGxykgYDpw");
         setContentView(R.layout.activity_main);
         listView = findViewById(R.id.listView);
-        adapter = new ArrayAdapter<>(this, R.layout.busitem, R.id.textView, new ArrayList<>(Arrays.asList("buss nr1", "buss nr12", "buss nr13", "buss nr14", "buss nr15")));
+        adapter = new ArrayAdapter<>(this, R.layout.busitem, R.id.textView, new ArrayList<>(Arrays.asList("buss nr1", "buss nr2", "buss nr3", "buss nr4", "buss nr5")));
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
