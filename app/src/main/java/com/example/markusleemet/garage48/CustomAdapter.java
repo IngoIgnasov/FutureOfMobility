@@ -42,10 +42,10 @@ public class CustomAdapter extends ArrayAdapter<BusInfo> implements View.OnClick
         number.setText(currenBusInfo.getNumber());
 
         TextView destination = (TextView) listItem.findViewById(R.id.destination);
-        destination.setText(currenBusInfo.getDestination());
+        destination.setText(currenBusInfo.getTripPath());
 
         TextView arrival = (TextView) listItem.findViewById(R.id.arrival);
-        arrival.setText(currenBusInfo.getArriveingTime());
+        arrival.setText(currenBusInfo.getArriveingTimeAsString());
 
         return listItem;
     }
