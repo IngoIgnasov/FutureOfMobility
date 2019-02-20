@@ -3,21 +3,18 @@ package com.example.markusleemet.garage48;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class BussStopActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter adapter;
     private TextView nameOfStation;
-
+    private Toolbar toolbar;
 
 
 
@@ -30,6 +27,9 @@ public class BussStopActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nameOfStation = findViewById(R.id.nameOfStation);
         nameOfStation.setText(intent.getStringExtra("nameOfStation"));
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
 
 
