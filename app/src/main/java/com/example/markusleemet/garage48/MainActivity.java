@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         .zoom(10)
                         .tilt(20)
                         .build();
-                mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
+                //mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
 
 
                 Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG);
