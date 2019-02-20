@@ -11,11 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -34,11 +35,12 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
     private MapView mapView;
-    private MapboxMap mapboxMap;
     private LocationManager locationManager;
-    private  static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
+    private  static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private String URL = "http://lvnap.lv:8011/";
+    private Random random = new Random();
+    private int id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         Log.i("gpsLocation", "application was created");
         Mapbox.getInstance(this, "pk.eyJ1IjoibWFya3VzbGVlbWV0IiwiYSI6ImNqc2M2OW9xbDA1dmM0M254aGJsMWd6a3oifQ.Tk8i1j5_Bsy3ZGxykgYDpw");
         setContentView(R.layout.activity_main);
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -71,12 +74,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 toast.show();
 
 
-                mapboxMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .title("Your location"));
+
 
                 try{
-                    run(teeGeoJSON(Float.valueOf(String.valueOf(location.getLongitude()).replaceAll(",", ".")), Double.valueOf(String.valueOf(location.getLatitude()).replaceAll(",", "."))));
+                    run(teeGeoJSON(Float.valueOf(String.valueOf(location.getLongitude()).replaceAll(",", ".")), Double.valueOf(String.valueOf(location.getLatitude()).replaceAll(",", ".")), id));
                 }catch (IOException e){
                     Log.i("gpsLocation", "exepto");
                 }
@@ -113,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         //onLocationChanged(location);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
 
+        //generate random id for the device
+        id = random.nextInt(1000000);
 
     }
 
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     }
 
-    private static String teeGeoJSON(double arg1, double arg2){
+    private static String teeGeoJSON(double arg1, double arg2, int arg3){
         String json = String.format(Locale.US,"{\n" +
                         "  \"type\": \"Feature\",\n" +
                         "  \"geometry\": {\n" +
@@ -203,10 +206,10 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                         "    \"coordinates\": [%f, %f]\n" +
                         "  },\n" +
                         "  \"properties\": {\n" +
-                        "    \"name\": \"proovi koht\"\n" +
+                        "    \"name\": \"%d\"\n" +
                         "  }\n" +
                         "}",
-                arg1,arg2);
+                arg1,arg2, arg3);
         return json;
     }
 }
