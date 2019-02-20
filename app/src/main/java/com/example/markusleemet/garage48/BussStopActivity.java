@@ -3,6 +3,9 @@ package com.example.markusleemet.garage48;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ public class BussStopActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter adapter;
     private TextView nameOfStation;
+
 
 
 
@@ -30,13 +34,22 @@ public class BussStopActivity extends AppCompatActivity {
 
 
         ArrayList<BusInfo> bussesList = new ArrayList<>();
-        bussesList.add(new BusInfo("1", "Viimsi", "5.32"));
-        bussesList.add(new BusInfo("2", "Tartu", "12.00"));
-        bussesList.add(new BusInfo("3", "Keila", "17.43"));
+        bussesList.add(new BusInfo("13", "Viimsi", "2"));
+        bussesList.add(new BusInfo("2", "Tartu", "7"));
+        bussesList.add(new BusInfo("49", "Keila", "12"));
 
 
         adapter = new CustomAdapter(bussesList, this);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BusInfo busInfo = (BusInfo) parent.getItemAtPosition(position);
+                Intent onTheBusIntent = new Intent(BussStopActivity.this, OnTheBusView.class);
+                onTheBusIntent.putExtra("bussNumber", busInfo.getNumber());
+                startActivity(onTheBusIntent);
+            }
+        });
 
 
 
