@@ -18,7 +18,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -45,13 +51,18 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private String URL = "http://lvnap.lv:8011/";
     private Random random = new Random();
     private int id;
+
+    private static MapboxMap mapbox;
     private ListView listView;
     private ArrayAdapter adapter;
 
+    private PermissionsManager permissionsManager;
+    private LocationComponent locationComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Log.i("gpsLocation", "application was created");
         Mapbox.getInstance(this, "pk.eyJ1IjoibWFya3VzbGVlbWV0IiwiYSI6ImNqc2M2OW9xbDA1dmM0M254aGJsMWd6a3oifQ.Tk8i1j5_Bsy3ZGxykgYDpw");
         setContentView(R.layout.activity_main);
@@ -74,10 +85,12 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
+                mapbox = mapboxMap;
                 mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
+
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
-
+                        enableLocationComponent(style);
                     }
                 });
             }
@@ -88,6 +101,15 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onLocationChanged(Location location) {
                 Log.i("gpsLocation", "location was changes");
+                //paneme kaardi keskele
+                CameraPosition position = new CameraPosition.Builder()
+                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .zoom(10)
+                        .tilt(20)
+                        .build();
+                mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
+
+
                 Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG);
                 toast.show();
 
@@ -163,6 +185,44 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         });
     }
 
+    //kood validatsiooni jms küsimiseks
+    @SuppressWarnings( {"MissingPermission"})
+    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+// Check if permissions are enabled and if not request
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+// Activate the MapboxMap LocationComponent to show user location
+// Adding in LocationComponentOptions is also an optional parameter
+            locationComponent = mapbox.getLocationComponent();
+            locationComponent.activateLocationComponent(this, loadedMapStyle);
+            locationComponent.setLocationComponentEnabled(true);
+// Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING);
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onExplanationNeeded(List<String> permissionsToExplain) {
+        Toast.makeText(this, "This app needs location permissions in order to show its functionality", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onPermissionResult(boolean granted) {
+        if (granted) {
+            enableLocationComponent(mapbox.getStyle());
+        } else {
+            Toast.makeText(this, "You didn\\'t grant location permissions.", Toast.LENGTH_LONG).show();
+            finish();
+        }
+    }
+
 
     @Override
     public void onStart() {
@@ -204,16 +264,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-
-    }
-
-    @Override
-    public void onPermissionResult(boolean granted) {
-
     }
 
     private static String teeGeoJSON(double arg1, double arg2, int arg3){
