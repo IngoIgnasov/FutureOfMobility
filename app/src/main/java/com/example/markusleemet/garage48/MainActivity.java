@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent bussStopIntent = new Intent(MainActivity.this, BussStopActivity.class);
+                bussStopIntent.putExtra("busNumber", listView.getItemAtPosition(position).toString());
                 startActivity(bussStopIntent);
             }
         });
