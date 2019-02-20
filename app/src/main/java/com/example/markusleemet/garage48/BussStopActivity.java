@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,12 +39,22 @@ public class BussStopActivity extends AppCompatActivity {
         nameOfStation.setText(intent.getStringExtra("nameOfStation"));
 
         bussesList = new ArrayList<>();
-        bussesList.add(new BusInfo("1","Jaama", "Viimsi", 300));
-        bussesList.add(new BusInfo("2","Viljandi", "Tartu", 400));
-        bussesList.add(new BusInfo("3","Põllu", "Keila", 70));
+        bussesList.add(new BusInfo("1", "Jaama", "Viimsi", 300));
+        bussesList.add(new BusInfo("2", "Viljandi", "Tartu", 400));
+        bussesList.add(new BusInfo("3", "Põllu", "Keila", 70));
+
 
         adapter = new CustomAdapter(bussesList, this);
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                BusInfo busInfo = (BusInfo) parent.getItemAtPosition(position);
+                Intent onTheBusIntent = new Intent(BussStopActivity.this, OnTheBusView.class);
+                onTheBusIntent.putExtra("bussNumber", busInfo.getNumber());
+                startActivity(onTheBusIntent);
+            }
+        });
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -77,5 +90,3 @@ public class BussStopActivity extends AppCompatActivity {
 
     }
 }
-
-
