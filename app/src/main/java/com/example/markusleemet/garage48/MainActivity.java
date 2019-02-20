@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,25 +19,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.geojson.*;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.mapboxsdk.style.sources.Source;
-import com.mapbox.geojson.FeatureCollection;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -51,6 +51,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleOpacity;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
+
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleRadius;
 
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
@@ -276,8 +286,23 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         // than the middle of the marker being the anchor point on the map.
                         PropertyFactory.iconOffset(new Float[] {0f, 0f})
                 ));
+
+        /*//teise kihi lisame(ringid)---jätsime hetkel ikka pointerid
+        CircleLayer circleLayer = new CircleLayer("trees-style", MARKER_SOURCE);
+        circleLayer.withProperties(
+                circleOpacity(0.6f),
+                circleColor(Color.parseColor("#66b2ff")),
+                circleRadius(40f)
+
+
+        );
+        loadedMapStyle.addLayer(circleLayer);*/
     }
 
+    private float getRandomRadius(){
+        Random r = new Random();
+        return (50 + r.nextFloat() * (150 - 50));
+    }
 
     @Override
     public void onStart() {
