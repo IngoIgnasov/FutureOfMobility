@@ -2,6 +2,7 @@ package com.example.markusleemet.garage48;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,6 +12,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,6 +24,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -40,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private String URL = "http://lvnap.lv:8011/";
     private Random random = new Random();
     private int id;
+    private ListView listView;
+    private ArrayAdapter adapter;
 
 
     @Override
@@ -48,6 +55,16 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         Log.i("gpsLocation", "application was created");
         Mapbox.getInstance(this, "pk.eyJ1IjoibWFya3VzbGVlbWV0IiwiYSI6ImNqc2M2OW9xbDA1dmM0M254aGJsMWd6a3oifQ.Tk8i1j5_Bsy3ZGxykgYDpw");
         setContentView(R.layout.activity_main);
+        listView = findViewById(R.id.listView);
+        adapter = new ArrayAdapter<>(this, R.layout.busitem, R.id.textView, new ArrayList<>(Arrays.asList("buss nr1", "buss nr12", "buss nr13", "buss nr14", "buss nr15")));
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent bussStopIntent = new Intent(MainActivity.this, BussStopActivity.class);
+                startActivity(bussStopIntent);
+            }
+        });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mapView = findViewById(R.id.mapView);
