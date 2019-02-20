@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class BussStopActivity extends AppCompatActivity {
     private ListView listView;
-    private ArrayAdapter<String> adapter;
+    private CustomAdapter adapter;
 
 
 
@@ -19,8 +19,17 @@ public class BussStopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buss_stop);
         listView = findViewById(R.id.bussesAtBussStation);
-        adapter = new ArrayAdapter<>(this, R.layout.busitem, R.id.textView, new ArrayList<>(Arrays.asList("buss nr1", "buss nr12", "buss nr13", "buss nr14", "buss nr15")));
         listView.setAdapter(adapter);
+
+
+        ArrayList<BusInfo> bussesList = new ArrayList<>();
+        bussesList.add(new BusInfo("1", "Viimsi", "12"));
+
+
+        adapter = new CustomAdapter(bussesList, this);
+        listView.setAdapter(adapter);
+
+
 
     }
 
