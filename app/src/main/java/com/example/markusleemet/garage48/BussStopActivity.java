@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +26,8 @@ public class BussStopActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter adapter;
     private TextView nameOfStation;
+    private Toolbar toolbar;
+
 
 
     @Override
@@ -37,6 +39,8 @@ public class BussStopActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nameOfStation = findViewById(R.id.nameOfStation);
         nameOfStation.setText(intent.getStringExtra("nameOfStation"));
+        setSupportActionBar(toolbar);
+
 
         bussesList = new ArrayList<>();
         bussesList.add(new BusInfo("1", "Jaama", "Viimsi", 300));
