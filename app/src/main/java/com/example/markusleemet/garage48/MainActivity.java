@@ -66,8 +66,15 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private ListView listView;
     private ArrayAdapter adapter;
 
+    private List<Feature> markers;
+
     private PermissionsManager permissionsManager;
     private LocationComponent locationComponent;
+
+    //Strings
+    private static final String MARKER_SOURCE = "markers-source";
+    private static final String MARKER_STYLE_LAYER = "markers-style-layer";
+    private static final String MARKER_IMAGE = "custom-marker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,24 +111,17 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
-                        style.addImage("marker-icon-id",
-                                BitmapFactory.decodeResource(
-                                        MainActivity.this.getResources(), R.drawable.mapbox_marker_icon_default));
 
-
-                        GeoJsonSource geoJsonSource = new GeoJsonSource("source-id", Feature.fromGeometry(
-                                Point.fromLngLat(41.785,-87.779)));
-                        style.addSource(geoJsonSource);
-
-                        SymbolLayer symbolLayer = new SymbolLayer("layer-id", "source-id");
-                        symbolLayer.withProperties(
-                                PropertyFactory.iconImage("marker-icon-id")
-                        );
-                        style.addLayer(symbolLayer);
+                        //kood markeri lisamiseks
+                        style.addImage("custom-marker", BitmapFactory.decodeResource(
+                                MainActivity.this.getResources(), R.drawable.custom_marker));
+                        addMarkers(style);
                     }
                 });
             }
+
         });
+
 
 
         LocationListener locationListener = new LocationListener() {
@@ -143,8 +143,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                 Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG);
                 toast.show();
-
-
 
 
                 try{
@@ -219,14 +217,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     //kood validatsiooni jms küsimiseks
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
-// Check if permissions are enabled and if not request
+    // Check if permissions are enabled and if not request
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
-// Activate the MapboxMap LocationComponent to show user location
-// Adding in LocationComponentOptions is also an optional parameter
+    // Activate the MapboxMap LocationComponent to show user location
+    // Adding in LocationComponentOptions is also an optional parameter
             locationComponent = mapbox.getLocationComponent();
             locationComponent.activateLocationComponent(this, loadedMapStyle);
             locationComponent.setLocationComponentEnabled(true);
-// Set the component's camera mode
+    // Set the component's camera mode
             locationComponent.setCameraMode(CameraMode.TRACKING);
         } else {
             permissionsManager = new PermissionsManager(this);
@@ -252,6 +250,32 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             Toast.makeText(this, "You didn\\'t grant location permissions.", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    private void addMarkers(@NonNull Style loadedMapStyle) {
+        markers = new ArrayList<>();
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.1, 56.97)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(23.995, 56.8)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.04, 56.78)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.09, 56.79)));
+
+
+        /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+
+        loadedMapStyle.addSource(new GeoJsonSource(MARKER_SOURCE, FeatureCollection.fromFeatures(markers)));
+
+
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        loadedMapStyle.addLayer(new SymbolLayer(MARKER_STYLE_LAYER, MARKER_SOURCE)
+                .withProperties(
+                        PropertyFactory.iconAllowOverlap(true),
+                        PropertyFactory.iconIgnorePlacement(true),
+                        PropertyFactory.iconImage(MARKER_IMAGE),
+        // Adjust the second number of the Float array based on the height of your marker image.
+        // This is because the bottom of the marker should be anchored to the coordinate point, rather
+        // than the middle of the marker being the anchor point on the map.
+                        PropertyFactory.iconOffset(new Float[] {0f, 0f})
+                ));
     }
 
 
