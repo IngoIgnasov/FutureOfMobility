@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,25 +19,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.geojson.*;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.mapboxsdk.style.sources.Source;
-import com.mapbox.geojson.FeatureCollection;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -52,6 +52,16 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import retrofit2.http.POST;
+
+import static com.mapbox.mapboxsdk.style.expressions.Expression.exponential;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.get;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.stop;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.zoom;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleOpacity;
+import static com.mapbox.mapboxsdk.style.expressions.Expression.interpolate;
+
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.circleRadius;
 
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
@@ -67,8 +77,15 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private ListView listView;
     private ArrayAdapter adapter;
 
+    private List<Feature> markers;
+
     private PermissionsManager permissionsManager;
     private LocationComponent locationComponent;
+
+    //Strings
+    private static final String MARKER_SOURCE = "markers-source";
+    private static final String MARKER_STYLE_LAYER = "markers-style-layer";
+    private static final String MARKER_IMAGE = "custom-marker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,24 +124,17 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
-                        style.addImage("marker-icon-id",
-                                BitmapFactory.decodeResource(
-                                        MainActivity.this.getResources(), R.drawable.mapbox_marker_icon_default));
 
-
-                        GeoJsonSource geoJsonSource = new GeoJsonSource("source-id", Feature.fromGeometry(
-                                Point.fromLngLat(41.785,-87.779)));
-                        style.addSource(geoJsonSource);
-
-                        SymbolLayer symbolLayer = new SymbolLayer("layer-id", "source-id");
-                        symbolLayer.withProperties(
-                                PropertyFactory.iconImage("marker-icon-id")
-                        );
-                        style.addLayer(symbolLayer);
+                        //kood markeri lisamiseks
+                        style.addImage("custom-marker", BitmapFactory.decodeResource(
+                                MainActivity.this.getResources(), R.drawable.custom_marker));
+                        addMarkers(style);
                     }
                 });
             }
+
         });
+
 
 
         LocationListener locationListener = new LocationListener() {
@@ -146,8 +156,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
                 Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG);
                 toast.show();
-
-
 
 
                 try{
@@ -222,14 +230,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     //kood validatsiooni jms küsimiseks
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
-// Check if permissions are enabled and if not request
+    // Check if permissions are enabled and if not request
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
-// Activate the MapboxMap LocationComponent to show user location
-// Adding in LocationComponentOptions is also an optional parameter
+    // Activate the MapboxMap LocationComponent to show user location
+    // Adding in LocationComponentOptions is also an optional parameter
             locationComponent = mapbox.getLocationComponent();
             locationComponent.activateLocationComponent(this, loadedMapStyle);
             locationComponent.setLocationComponentEnabled(true);
-// Set the component's camera mode
+    // Set the component's camera mode
             locationComponent.setCameraMode(CameraMode.TRACKING);
         } else {
             permissionsManager = new PermissionsManager(this);
@@ -257,6 +265,47 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    private void addMarkers(@NonNull Style loadedMapStyle) {
+        markers = new ArrayList<>();
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.1, 56.97)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(23.995, 56.8)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.04, 56.78)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.09, 56.79)));
+
+
+        /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
+
+        loadedMapStyle.addSource(new GeoJsonSource(MARKER_SOURCE, FeatureCollection.fromFeatures(markers)));
+
+
+        /* Style layer: A style layer ties together the source and image and specifies how they are displayed on the map. */
+        loadedMapStyle.addLayer(new SymbolLayer(MARKER_STYLE_LAYER, MARKER_SOURCE)
+                .withProperties(
+                        PropertyFactory.iconAllowOverlap(true),
+                        PropertyFactory.iconIgnorePlacement(true),
+                        PropertyFactory.iconImage(MARKER_IMAGE),
+        // Adjust the second number of the Float array based on the height of your marker image.
+        // This is because the bottom of the marker should be anchored to the coordinate point, rather
+        // than the middle of the marker being the anchor point on the map.
+                        PropertyFactory.iconOffset(new Float[] {0f, 0f})
+                ));
+
+        /*//teise kihi lisame(ringid)---jätsime hetkel ikka pointerid
+        CircleLayer circleLayer = new CircleLayer("trees-style", MARKER_SOURCE);
+        circleLayer.withProperties(
+                circleOpacity(0.6f),
+                circleColor(Color.parseColor("#66b2ff")),
+                circleRadius(40f)
+
+
+        );
+        loadedMapStyle.addLayer(circleLayer);*/
+    }
+
+    private float getRandomRadius(){
+        Random r = new Random();
+        return (50 + r.nextFloat() * (150 - 50));
+    }
 
     @Override
     public void onStart() {
