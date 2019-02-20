@@ -23,7 +23,9 @@ public class BussStopActivity extends AppCompatActivity {
 
 
         ArrayList<BusInfo> bussesList = new ArrayList<>();
-        bussesList.add(new BusInfo("1", "Viimsi", "12"));
+        bussesList.add(new BusInfo("1", "Viimsi", "5.32"));
+        bussesList.add(new BusInfo("2", "Tartu", "12.00"));
+        bussesList.add(new BusInfo("3", "Keila", "17.43"));
 
 
         adapter = new CustomAdapter(bussesList, this);

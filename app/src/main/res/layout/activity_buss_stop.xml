@@ -11,6 +11,7 @@
         android:id="@+id/textView2"
         android:layout_width="395dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Buss Arrivals"
         android:textAlignment="center"
         android:textSize="24sp"
@@ -22,7 +23,7 @@
     <ListView
         android:id="@+id/bussesAtBussStation"
         android:layout_width="0dp"
-        android:layout_height="658dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
