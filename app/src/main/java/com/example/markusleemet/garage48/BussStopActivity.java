@@ -26,7 +26,7 @@ public class BussStopActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         Intent intent = getIntent();
         nameOfStation = findViewById(R.id.nameOfStation);
-        nameOfStation.setText(intent.getStringExtra("nameOfStation"));
+        //nameOfStation.setText(intent.getStringExtra("nameOfStation"));
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

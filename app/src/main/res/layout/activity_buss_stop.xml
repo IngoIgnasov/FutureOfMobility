@@ -9,9 +9,10 @@
     tools:context=".BussStopActivity">
 
     <include
+        android:id="@+id/toolbar"
         layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
-
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="139dp" />
 
 
     <TextView
@@ -19,13 +20,12 @@
         android:layout_width="395dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Buss Arrivals"
         android:textAlignment="center"
         android:textSize="35dp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/bussesAtBussStation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
