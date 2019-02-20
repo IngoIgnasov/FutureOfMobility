@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -29,6 +31,13 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.geojson.*;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.sources.Source;
+import com.mapbox.geojson.FeatureCollection;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private int id;
 
     private static MapboxMap mapbox;
+    private int alreadyCentered=0;
     private ListView listView;
     private ArrayAdapter adapter;
 
@@ -63,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //peame uuesti centerima
+        alreadyCentered = 0;
         Log.i("gpsLocation", "application was created");
         Mapbox.getInstance(this, "pk.eyJ1IjoibWFya3VzbGVlbWV0IiwiYSI6ImNqc2M2OW9xbDA1dmM0M254aGJsMWd6a3oifQ.Tk8i1j5_Bsy3ZGxykgYDpw");
         setContentView(R.layout.activity_main);
@@ -73,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent bussStopIntent = new Intent(MainActivity.this, BussStopActivity.class);
-                bussStopIntent.putExtra("busNumber", listView.getItemAtPosition(position).toString());
                 startActivity(bussStopIntent);
             }
         });
@@ -86,11 +97,27 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             public void onMapReady(@NonNull MapboxMap mapboxMap) {
 
                 mapbox = mapboxMap;
+
+
                 mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
 
                     @Override
                     public void onStyleLoaded(@NonNull Style style) {
                         enableLocationComponent(style);
+                        style.addImage("marker-icon-id",
+                                BitmapFactory.decodeResource(
+                                        MainActivity.this.getResources(), R.drawable.mapbox_marker_icon_default));
+
+
+                        GeoJsonSource geoJsonSource = new GeoJsonSource("source-id", Feature.fromGeometry(
+                                Point.fromLngLat(41.785,-87.779)));
+                        style.addSource(geoJsonSource);
+
+                        SymbolLayer symbolLayer = new SymbolLayer("layer-id", "source-id");
+                        symbolLayer.withProperties(
+                                PropertyFactory.iconImage("marker-icon-id")
+                        );
+                        style.addLayer(symbolLayer);
                     }
                 });
             }
@@ -102,12 +129,16 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             public void onLocationChanged(Location location) {
                 Log.i("gpsLocation", "location was changes");
                 //paneme kaardi keskele
-                CameraPosition position = new CameraPosition.Builder()
-                        .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                        .zoom(10)
-                        .tilt(20)
-                        .build();
-                //mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
+                //muutmine välja
+/*                if(alreadyCentered == 0) {
+                    CameraPosition position = new CameraPosition.Builder()
+                            .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                            .zoom(10)
+                            .tilt(20)
+                            .build();
+                    mapbox.animateCamera(CameraUpdateFactory.newCameraPosition(position), 1000);
+                }
+                alreadyCentered = 1;*/
 
 
                 Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG);
