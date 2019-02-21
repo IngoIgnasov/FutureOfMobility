@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:layout_margin="0dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -13,8 +14,9 @@
         tools:layout_editor_absoluteX="175dp">
 
         <TextView
+            android:paddingVertical="4dp"
             android:id="@+id/textView3"
-            android:layout_width="405dp"
+            android:layout_width="436dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:background="@color/colorPrimaryDark"
@@ -22,13 +24,13 @@
             android:paddingTop="5dp"
             android:text="5 closest bus stops:"
             android:textColor="@android:color/white"
-            android:textSize="25dp"
+            android:textSize="35sp"
             android:textStyle="bold"
             mapbox:layout_constraintEnd_toEndOf="parent" />
 
         <ListView
             android:id="@+id/listView"
-            android:layout_width="395dp"
+            android:layout_width="match_parent"
             android:layout_height="164dp"
             android:layout_margin="0dp"
             android:layout_marginStart="8dp"

@@ -154,10 +154,6 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 alreadyCentered = 1;*/
 
 
-                Toast toast = Toast.makeText(getApplicationContext(), String.valueOf(location.getLatitude()) + String.valueOf(location.getLongitude()), Toast.LENGTH_LONG);
-                toast.show();
-
-
                 try{
                     run(teeGeoJSON(Float.valueOf(String.valueOf(location.getLongitude()).replaceAll(",", ".")), Double.valueOf(String.valueOf(location.getLatitude()).replaceAll(",", ".")), id));
                 }catch (IOException e){

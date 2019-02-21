@@ -4,21 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 
 public class BussStopActivity extends AppCompatActivity {
@@ -41,9 +33,9 @@ public class BussStopActivity extends AppCompatActivity {
 
 
         bussesList = new ArrayList<>();
-        bussesList.add(new BusInfo("1", "Jaama", "Viimsi", 300));
-        bussesList.add(new BusInfo("2", "Viljandi", "Tartu", 400));
-        bussesList.add(new BusInfo("3", "Põllu", "Keila", 70));
+        bussesList.add(new BusInfo("1", "K.Barona iela", "K.Barona iela", 300));
+        bussesList.add(new BusInfo("2", "Brīvības iela", "Pērnavas iela", 400));
+        bussesList.add(new BusInfo("3", "Miera iela", "A.Čaka iela", 70));
 
 
         adapter = new CustomAdapter(bussesList, this);
