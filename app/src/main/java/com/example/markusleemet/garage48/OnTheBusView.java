@@ -28,13 +28,13 @@ public class OnTheBusView extends AppCompatActivity {
         bussNumber.setText(getIntent().getStringExtra("busDestination"));
         listView = findViewById(R.id.finalList);
         littleText = findViewById(R.id.littleText);
-        littleText.setText("buss " + getIntent().getStringExtra("bussNumber"));
+        littleText.setText("bus " + getIntent().getStringExtra("bussNumber"));
 
 
         ArrayList<OnTheBussInfo> stopsList = new ArrayList<>();
-        stopsList.add(new OnTheBussInfo("Viimsi", "2"));
-        stopsList.add(new OnTheBussInfo("Tartu", "5"));
-        stopsList.add(new OnTheBussInfo("Tallinn", "7"));
+        stopsList.add(new OnTheBussInfo("Sporta akadēmija", "2"));
+        stopsList.add(new OnTheBussInfo("Meža skola", "5"));
+        stopsList.add(new OnTheBussInfo("Tirzas iela", "7"));
 
 
         onTheBussAdapter = new CustomOnTheBussAdapter(stopsList, this);
