@@ -21,10 +21,14 @@ public class OnTheBusView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_the_bus_view);
         bussNumber = findViewById(R.id.bussNumberAtFinalView);
-        bussNumber.setText(getIntent().getStringExtra("busDescription"));
+
+        Log.i("intent", getIntent().getStringExtra("busDestination"));
+        Log.i("intent", getIntent().getStringExtra("bussNumber"));
+
+        bussNumber.setText(getIntent().getStringExtra("busDestination"));
         listView = findViewById(R.id.finalList);
         littleText = findViewById(R.id.littleText);
-        littleText.setText("buss " + getIntent().getStringExtra("bassNumber"));
+        littleText.setText("buss " + getIntent().getStringExtra("bussNumber"));
 
 
         ArrayList<OnTheBussInfo> stopsList = new ArrayList<>();
