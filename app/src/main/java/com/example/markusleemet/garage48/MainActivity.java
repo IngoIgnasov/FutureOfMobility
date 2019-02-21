@@ -267,11 +267,17 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
 
     private void addMarkers(@NonNull Style loadedMapStyle) {
         markers = new ArrayList<>();
-        markers.add(Feature.fromGeometry(Point.fromLngLat(24.1, 56.97)));
-        markers.add(Feature.fromGeometry(Point.fromLngLat(23.995, 56.8)));
-        markers.add(Feature.fromGeometry(Point.fromLngLat(24.04, 56.78)));
-        markers.add(Feature.fromGeometry(Point.fromLngLat(24.09, 56.79)));
-
+/*        markers.add(Feature.fromGeometry(Point.fromLngLat(24.119789, 56.948624)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.119382, 56.945745)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.12039, 56.944797)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.120133, 56.946857)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.114167, 56.945)));*/
+        //close to LMT
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.168691, 56.973847)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.165473, 56.973988)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.16852, 56.972643)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.17339, 56.975274)));
+        markers.add(Feature.fromGeometry(Point.fromLngLat(24.16322, 56.978466)));
 
         /* Source: A data source specifies the geographic coordinate where the image marker gets placed. */
 
