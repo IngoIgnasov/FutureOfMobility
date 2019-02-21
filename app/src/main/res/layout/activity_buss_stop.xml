@@ -5,7 +5,6 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".BussStopActivity">
 
     <include
@@ -22,7 +21,7 @@
         android:layout_marginTop="8dp"
         android:textAlignment="center"
         android:textSize="35dp"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/bussesAtBussStation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -19,7 +19,7 @@
         mapbox:mapbox_cameraTargetLat="57"
         mapbox:mapbox_cameraTargetLng="24"
         mapbox:mapbox_cameraTilt="0"
-        mapbox:mapbox_cameraZoom="12" />
+        mapbox:mapbox_cameraZoom="12"/>
 
     <ListView
         android:layout_margin="0dp"

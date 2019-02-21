@@ -1,13 +1,19 @@
 package com.example.markusleemet.garage48;
 
-public class BusInfo {
+public class BusInfo implements Comparable<BusInfo> {
     private String number;
     private String destination;
-    private String arriveingTime;
+    private int arriveingTime;
+    private String startingStation;
 
+    @Override
+    public int compareTo(BusInfo o) {
+        return Integer.compare(this.arriveingTime, o.arriveingTime);
+    }
 
-    public BusInfo(String number, String destination, String arriveingTime) {
+    public BusInfo(String number, String startingStation, String destination, int arriveingTime) {
         this.number = number;
+        this.startingStation = startingStation;
         this.destination = destination;
         this.arriveingTime = arriveingTime;
     }
@@ -20,19 +26,41 @@ public class BusInfo {
         this.number = number;
     }
 
+    public String getStartingStation() {
+        return startingStation;
+    }
+
+
     public String getDestination() {
         return destination;
+    }
+
+    public String getTripPath() {
+        return startingStation + "-...-" + destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public String getArriveingTime() {
+    public int getArriveingTime() {
         return arriveingTime;
     }
 
-    public void setArriveingTime(String arriveingTime) {
+    public String getArriveingTimeAsString() {
+        if (arriveingTime < 60) {
+            return "<1m";
+        } else {
+            return Integer.toString(arriveingTime / 60) + "m";
+        }
+    }
+
+    public void tickDown() {
+        this.arriveingTime--;
+    }
+
+    public void setArriveingTime(int arriveingTime) {
         this.arriveingTime = arriveingTime;
     }
+
 }
