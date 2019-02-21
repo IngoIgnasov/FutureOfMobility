@@ -7,18 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".BussStopActivity">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="139dp" />
-
 
     <TextView
         android:id="@+id/nameOfStation"
-        android:layout_width="395dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:background="@color/colorPrimaryDark"
+        android:paddingVertical="4dp"
         android:textAlignment="center"
         android:textSize="35dp"
         android:textStyle="bold"

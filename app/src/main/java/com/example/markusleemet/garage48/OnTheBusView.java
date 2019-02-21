@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class OnTheBusView extends AppCompatActivity {
     private TextView bussNumber;
+    private TextView littleText;
     private ListView listView;
     private CustomOnTheBussAdapter onTheBussAdapter;
 
@@ -20,8 +21,10 @@ public class OnTheBusView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_the_bus_view);
         bussNumber = findViewById(R.id.bussNumberAtFinalView);
-        bussNumber.setText("buss " + getIntent().getStringExtra("bussNumber"));
+        bussNumber.setText(getIntent().getStringExtra("busDescription"));
         listView = findViewById(R.id.finalList);
+        littleText = findViewById(R.id.littleText);
+        littleText.setText("buss " + getIntent().getStringExtra("bassNumber"));
 
 
         ArrayList<OnTheBussInfo> stopsList = new ArrayList<>();

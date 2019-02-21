@@ -48,6 +48,7 @@ public class BussStopActivity extends AppCompatActivity {
                 BusInfo busInfo = (BusInfo) parent.getItemAtPosition(position);
                 Intent onTheBusIntent = new Intent(BussStopActivity.this, OnTheBusView.class);
                 onTheBusIntent.putExtra("bussNumber", busInfo.getNumber());
+                onTheBusIntent.putExtra("busDestination", busInfo.getDestination());
                 startActivity(onTheBusIntent);
             }
         });
