@@ -5,14 +5,7 @@
     android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".BussStopActivity">
-
-    <include
-        layout="@layout/toolbar"
-        android:id="@+id/toolbar"/>
-
-
 
     <TextView
         android:id="@+id/nameOfStation"

@@ -39,8 +39,6 @@ public class BussStopActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nameOfStation = findViewById(R.id.nameOfStation);
         nameOfStation.setText(intent.getStringExtra("nameOfStation"));
-        setSupportActionBar(toolbar);
-
 
         bussesList = new ArrayList<>();
         bussesList.add(new BusInfo("1", "Jaama", "Viimsi", 300));
