@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,8 +26,6 @@ public class BussStopActivity extends AppCompatActivity {
     private ListView listView;
     private CustomAdapter adapter;
     private TextView nameOfStation;
-    private Toolbar toolbar;
-
 
 
     @Override
@@ -39,6 +37,8 @@ public class BussStopActivity extends AppCompatActivity {
         Intent intent = getIntent();
         nameOfStation = findViewById(R.id.nameOfStation);
         nameOfStation.setText(intent.getStringExtra("nameOfStation"));
+
+
 
         bussesList = new ArrayList<>();
         bussesList.add(new BusInfo("1", "Jaama", "Viimsi", 300));
@@ -54,6 +54,7 @@ public class BussStopActivity extends AppCompatActivity {
                 BusInfo busInfo = (BusInfo) parent.getItemAtPosition(position);
                 Intent onTheBusIntent = new Intent(BussStopActivity.this, OnTheBusView.class);
                 onTheBusIntent.putExtra("bussNumber", busInfo.getNumber());
+                onTheBusIntent.putExtra("busDestination", busInfo.getDestination());
                 startActivity(onTheBusIntent);
             }
         });
@@ -88,7 +89,7 @@ public class BussStopActivity extends AppCompatActivity {
         //sorteerimine
         Collections.sort(bussesList);
         adapter.notifyDataSetChanged();
-        Log.i("threadlogi", "jüudsin siia");
 
     }
+
 }

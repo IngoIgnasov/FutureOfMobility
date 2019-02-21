@@ -7,18 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".BussStopActivity">
 
+
     <TextView
         android:id="@+id/nameOfStation"
-        android:layout_width="395dp"
+        android:textColor="#FFFFFF"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Buss Arrivals"
+        android:background="@color/colorPrimaryDark"
+        android:paddingVertical="4dp"
         android:textAlignment="center"
         android:textSize="35dp"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/bussesAtBussStation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
