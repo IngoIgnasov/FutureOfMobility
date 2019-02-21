@@ -81,7 +81,6 @@ public class BussStopActivity extends AppCompatActivity {
         //sorteerimine
         Collections.sort(bussesList);
         adapter.notifyDataSetChanged();
-
     }
 
 }

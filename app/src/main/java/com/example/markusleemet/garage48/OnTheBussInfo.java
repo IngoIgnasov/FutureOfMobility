@@ -1,15 +1,19 @@
 package com.example.markusleemet.garage48;
 
-public class OnTheBussInfo {
+public class OnTheBussInfo implements Comparable<OnTheBussInfo> {
     private String stationName;
-    private String time;
+    private Integer time;
 
 
-    public OnTheBussInfo(String stationName, String time) {
+    public OnTheBussInfo(String stationName, Integer time) {
         this.stationName = stationName;
         this.time = time;
     }
 
+
+    public void tickDown() {
+        this.time--;
+    }
 
 
     public String getStationName() {
@@ -20,11 +24,24 @@ public class OnTheBussInfo {
         this.stationName = stationName;
     }
 
-    public String getTime() {
+    public Integer getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Integer time) {
         this.time = time;
+    }
+
+    public String getArriveingTimeAsString() {
+        if (time < 60) {
+            return "<1m";
+        } else {
+            return Integer.toString(time / 60) + "m";
+        }
+    }
+
+    @Override
+    public int compareTo(OnTheBussInfo o) {
+        return Integer.compare(this.time,o.time);
     }
 }

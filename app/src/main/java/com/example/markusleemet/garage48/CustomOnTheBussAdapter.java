@@ -38,7 +38,7 @@ public class CustomOnTheBussAdapter extends ArrayAdapter<OnTheBussInfo>{
         stationName.setText(currenBusInfo.getStationName());
 
         TextView time = (TextView) listItem.findViewById(R.id.timeAtFinalView);
-        time.setText(currenBusInfo.getTime() + "m");
+        time.setText(currenBusInfo.getArriveingTimeAsString());
 
         return listItem;
     }
